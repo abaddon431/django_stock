@@ -1,0 +1,137 @@
+{% load humanize %}
+<div
+  class="current-stocks py-2 border-2 border-secondary border-opacity-25"
+>
+  <h1 class="mb-4">Price Predictions</h1>
+  <div class="row">
+
+
+    <!-- this is quantile up -->
+    <div class="quantile_up col">
+      <h4 class="fs-6">Quantile (95%)</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        {% comment %} <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-up-circle-fill text-success"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"
+          />
+        </svg> {% endcomment %}
+        <p class="fs-2 ms-1 text-success fw-bold">₱ {{ request.session.financial_data.quantile_ninetyfive|intcomma }}</p>
+      </div>
+    </div>
+
+
+    <!-- this is expected price -->
+    <div class="expected-price col">
+      <h4 class="fs-6">Expected Price</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        <p class="fs-2 ms-1 fw-bold">₱ {{ request.session.financial_data.expected_price|intcomma }}</p>
+      </div>
+    </div>
+
+    <!-- this is quantile down -->
+    <div class="quantile_down col">
+      <h4 class="fs-6">Quantile (5%)</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        {% comment %} <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-down-circle-fill text-danger"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"
+          />
+        </svg> {% endcomment %}
+        <p class="fs-2 ms-1 text-danger fw-bold">₱ {{ request.session.financial_data.quantile_five|intcomma }}</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="container">
+  <canvas id="line-chart"></canvas>
+</div>
+
+
+<div
+  class="current-stocks py-2 border-2 border-secondary border-opacity-25"
+>
+  <h1 class="mb-4">Investment Prediction</h1>
+  <div class="row">
+    <!-- this is initial investment up -->
+    <div class="initial-investment col">
+      <h4 class="fs-6">Initial Investment</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        <p class="fs-2 ms-1 fw-bold">₱ {{ request.session.financial_data.initial_investment|intcomma }}</p>
+      </div>
+    </div>
+    <div class="stock-price col">
+      <h4 class="fs-6">Stock Price</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        <p class="fs-2 ms-1 fw-bold">₱ {{ request.session.financial_data.last_qoute|intcomma }}</p>
+      </div>
+    </div>
+    <div class="stocks-bought col">
+      <h4 class="fs-6">Stocks Bought</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        <p class="fs-2 ms-1 fw-bold">{{ request.session.financial_data.investment_in_stocks }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <!-- this is possible high-->
+    <div class="quantile_up col">
+      <h4 class="fs-6">Possible High</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        {% comment %} <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-down-circle-fill text-danger"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"
+          />
+        </svg> {% endcomment %}
+        <p class="fs-3 ms-1 text-success fw-bold">₱ {{ request.session.financial_data.high_expected_returns|intcomma }}</p>
+        <p class="fs-10 ms-1 text-success fw-bold"><sup>+₱{{ request.session.financial_data.high_gains_losses|intcomma }}</sup></p>
+        </div>
+      </div>
+    <!-- this is expected investment value -->
+    <div class="expected-price col">
+      <h4 class="fs-6">Expected Investment Value</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        {% if request.session.financial_data.expected_returns < request.session.financial_data.initial_investment %}
+          <p class="fs-3 ms-1 text-danger fw-bold">₱ {{ request.session.financial_data.expected_returns|intcomma }}</p>
+          <p class="fs-10 ms-1 text-danger"><sup>-₱{{ request.session.financial_data.return_of_investment|intcomma}}</sup></p>
+
+        {% else %}
+          <p class="fs-3 ms-1 text-success fw-bold">₱ {{ request.session.financial_data.expected_returns|intcomma }}</p>
+          <p class="fs-10 ms-1 text-success"><sup>+₱{{ request.session.financial_data.return_of_investment|intcomma}}</sup></p>
+
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- this is possible low-->
+    <div class="quantile_down col">
+      <h4 class="fs-6">Possible Low</h4>
+      <div class="d-flex align-items-baseline justify-content-center">
+        <p class="fs-3 ms-1 text-danger fw-bold">₱{{ request.session.financial_data.low_expected_returns|intcomma }}</p>
+        <p class="fs-10 ms-1 text-danger fw-bold"><sup>-₱{{ request.session.financial_data.low_gains_losses|intcomma }}</sup></p>
+      </div>
+    </div>
+  </div>
+</div>

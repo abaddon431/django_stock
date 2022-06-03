@@ -1,0 +1,43 @@
+<div class="calculator my-4 row">
+    <form action="{% url 'stockApp:update-stock' %}" method="POST" onsubmit="return spinner()">
+      {% csrf_token %}
+      <div class="row gap-0">
+        <div class="col">
+          <input
+            type="number"
+            class="form-control"
+            placeholder="No. of Days"
+            name="simulation_days"
+            required
+            min="1"
+            max="10001"
+          />
+        </div>
+        <div class="col">
+          <input
+            type="number"
+            class="form-control"
+            placeholder="No. of Simulations"
+            name="simulation_number"
+            required
+            min="1"
+            max='10001'
+          />
+        </div>
+        <div class="col">
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Investment in Peso"
+            name="initial_investment"
+            required
+          />
+        </div>
+      </div>
+      <div class="col mt-3 d-grid">
+        <button type="submit" name="update-btn" class="btn btn-dark">
+          Start Simulation
+        </button>
+      </div>
+    </form>
+  </div>

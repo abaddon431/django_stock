@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Monte Carlo Simulator{% endblock title %}
+
+{% block content %}
+<div class="loader-container" id="main-spinner">
+        <span class="loader"><span class="loader-inner"></span></span>
+        <span class="loader-text" id="loader-text"></span>
+</div>
+<div class="main-container text-center container">
+    <!-- here goes the Hero Section -->
+    {% include 'stockApp/includes/hero-section.html' %}
+
+
+    <!-- here goes the Stocks Forecasting Section -->
+    {% include 'stockApp/includes/stocks-forecasting.html' %}
+</div>
+
+{% endblock content %}

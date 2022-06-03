@@ -1,0 +1,41 @@
+{% load static %}
+<section
+  id="stocks-forecasting"
+  class="border-top border-bottom border-2 border-secondary border-opacity-25 py-4"
+>
+  <h1 class="fs-3">Stocks Forecasting</h1>
+  <h2 class="fs-6 text-secondary">Monte Carlo Simulation Algorithm</h2>
+  {% if messages %}
+  <div>
+    {% for message in messages %} {% include 'stockApp/includes/messages.html'
+    %} {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- insert here the calculator -->
+  {% include 'stockApp/includes/calculator.html' %}
+
+  <!-- here goes the frequency graph -->
+  <div class="graph-container">
+    <img
+      src="{% static 'images/graph/forecast_graph.png' %}?{% now 'Ymdhis' %}"
+      alt="forecast-graph"
+      class="img-fluid"
+    />
+
+    <!-- here goes the histogram -->
+    <div
+      class="histogram-container border-top border-bottom border-2 border-secondary border-opacity-25 py-3 my-3"
+    >
+      <img
+        src="{% static 'images/graph/histogram.png' %}?{% now 'Ymdhis' %}"
+        alt="distribution-graph"
+        class="img-fluid"
+      />
+    </div>
+  </div>
+
+  {% if not request.session.financial_data.expected_price %} {% else %}
+  <!-- insert here the price predictions -->
+  {% include 'stockApp/includes/price-predictions.html' %} {% endif %}
+</section>
